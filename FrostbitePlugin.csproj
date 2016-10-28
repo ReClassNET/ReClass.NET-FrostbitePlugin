@@ -71,6 +71,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="WeakPtrCodeGenerator.cs" />
     <Compile Include="WeakPtrNode.cs" />
     <Compile Include="WeakPtrSchemaConverter.cs" />
   </ItemGroup>

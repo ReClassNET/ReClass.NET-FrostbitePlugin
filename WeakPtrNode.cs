@@ -13,6 +13,7 @@ namespace FrostbitePlugin
 		/// <summary>Size of the node in bytes.</summary>
 		public override int MemorySize => IntPtr.Size;
 
+		/// <summary>Called when the node was created. Creates a new class as inner node.</summary>
 		public override void Intialize()
 		{
 			var node = ClassManager.CreateClass();
