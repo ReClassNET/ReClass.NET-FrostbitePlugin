@@ -17,7 +17,7 @@ namespace FrostbitePlugin
 		/// <returns>The member definition of the node.</returns>
 		public MemberDefinition GetMemberDefinition(BaseNode node, Language language)
 		{
-			return new MemberDefinition(node, "fb::WeakPtr");
+			return new MemberDefinition(node, $"fb::WeakPtr<{((BaseReferenceNode)node).InnerNode.Name}>");
 		}
 	}
 }
