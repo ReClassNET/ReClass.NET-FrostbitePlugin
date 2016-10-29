@@ -1,4 +1,5 @@
 ﻿using ReClassNET.CodeGenerator;
+using ReClassNET.Logger;
 using ReClassNET.Nodes;
 
 namespace FrostbitePlugin
@@ -15,7 +16,7 @@ namespace FrostbitePlugin
 		/// <param name="node">The member node.</param>
 		/// <param name="language">The language to generate.</param>
 		/// <returns>The member definition of the node.</returns>
-		public MemberDefinition GetMemberDefinition(BaseNode node, Language language)
+		public MemberDefinition GetMemberDefinition(BaseNode node, Language language, ILogger logger)
 		{
 			return new MemberDefinition(node, $"fb::WeakPtr<{((BaseReferenceNode)node).InnerNode.Name}>");
 		}
