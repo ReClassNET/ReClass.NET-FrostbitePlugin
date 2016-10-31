@@ -84,12 +84,13 @@ namespace FrostbitePlugin
 		/// <returns>The node which is represented by the schema.</returns>
 		public BaseNode CreateNodeFromSchema(SchemaCustomNode schema, IReadOnlyDictionary<SchemaClassNode, ClassNode> classes, ILogger logger)
 		{
-			return new WeakPtrNode()
+			var node = new WeakPtrNode
 			{
 				Name = schema.Name,
-				Comment = schema.Comment,
-				InnerNode = classes[(schema as WeakPtrSchemaNode).InnerNode]
+				Comment = schema.Comment
 			};
+			node.ChangeInnerNode(classes[(schema as WeakPtrSchemaNode).InnerNode]);
+			return node;
 		}
 
 		/// <summary>Creates the element which represents the schema.</summary>

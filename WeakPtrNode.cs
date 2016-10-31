@@ -13,6 +13,14 @@ namespace FrostbitePlugin
 		/// <summary>Size of the node in bytes.</summary>
 		public override int MemorySize => IntPtr.Size;
 
+
+		/// <summary>Disable the cycle check for pointer references.</summary>
+		public WeakPtrNode()
+			: base(false)
+		{
+
+		}
+
 		/// <summary>Called when the node was created. Creates a new class as inner node.</summary>
 		public override void Intialize()
 		{
@@ -47,7 +55,7 @@ namespace FrostbitePlugin
 			x = AddText(view, x, y, FrostbitePluginExt.Settings.TypeColor, HotSpot.NoneId, "WeakPtr") + view.Font.Width;
 			x = AddText(view, x, y, FrostbitePluginExt.Settings.NameColor, HotSpot.NameId, Name) + view.Font.Width;
 			x = AddText(view, x, y, FrostbitePluginExt.Settings.ValueColor, HotSpot.NoneId, $"<{InnerNode.Name}>");
-			x = AddIcon(view, x, y, Icons.Change, 4, HotSpotType.ChangeAll);
+			x = AddIcon(view, x, y, Icons.Change, 4, HotSpotType.ChangeType);
 
 			x += view.Font.Width;
 			x = AddComment(view, x, y);
