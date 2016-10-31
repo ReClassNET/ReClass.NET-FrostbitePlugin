@@ -58,7 +58,7 @@ namespace FrostbitePlugin
 			x = AddIcon(view, x, y, Icons.Change, 4, HotSpotType.ChangeType);
 
 			x += view.Font.Width;
-			x = AddComment(view, x, y);
+			AddComment(view, x, y);
 
 			y += view.Font.Height;
 
@@ -86,6 +86,24 @@ namespace FrostbitePlugin
 			}
 
 			return y;
+		}
+
+		/// <summary>Calculates the height of the node.</summary>
+		/// <param name="view">The view information.</param>
+		/// <returns>The calculated height.</returns>
+		public override int CalculateHeight(ViewInfo view)
+		{
+			if (IsHidden)
+			{
+				return HiddenHeight;
+			}
+
+			var h = view.Font.Height;
+			if (levelsOpen[view.Level])
+			{
+				h += InnerNode.CalculateHeight(view);
+			}
+			return h;
 		}
 	}
 }
