@@ -53,9 +53,9 @@ namespace FrostbitePlugin
 
 		public override void Terminate()
 		{
-			host.UnregisterNodeType(typeof(WeakPtrNode), converter, generator);
+			host.DeregisterNodeType(typeof(WeakPtrNode), converter, generator);
 
-			host.UnregisterNodeInfoReader(reader);
+			host.DeregisterNodeInfoReader(reader);
 
 			host = null;
 		}
