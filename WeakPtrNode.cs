@@ -1,5 +1,6 @@
 ﻿using System;
 using ReClassNET;
+using ReClassNET.Memory;
 using ReClassNET.Nodes;
 using ReClassNET.UI;
 using ReClassNET.Util;
@@ -8,7 +9,7 @@ namespace FrostbitePlugin
 {
 	class WeakPtrNode : BaseReferenceNode
 	{
-		private readonly Memory memory = new Memory();
+		private readonly MemoryBuffer memory = new MemoryBuffer();
 
 		/// <summary>Size of the node in bytes.</summary>
 		public override int MemorySize => IntPtr.Size;

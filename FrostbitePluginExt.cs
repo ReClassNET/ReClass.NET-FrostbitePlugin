@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Text;
 using ReClassNET;
+using ReClassNET.Memory;
 using ReClassNET.Nodes;
 using ReClassNET.Plugins;
 using ReClassNET.Util;
@@ -65,7 +66,7 @@ namespace FrostbitePlugin
 	/// <summary>A custom node info reader which outputs Frostbite type infos.</summary>
 	class FrostBiteNodeInfoReader : INodeInfoReader
 	{
-		public string ReadNodeInfo(BaseNode node, IntPtr value, Memory memory)
+		public string ReadNodeInfo(BaseNode node, IntPtr value, MemoryBuffer memory)
 		{
 			var getTypeFnPtr = memory.Process.ReadRemoteObject<IntPtr>(value);
 			if (getTypeFnPtr.MayBeValid())
