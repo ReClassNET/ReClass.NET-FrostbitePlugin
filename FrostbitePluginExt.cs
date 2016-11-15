@@ -17,7 +17,7 @@ namespace FrostbitePlugin
 
 		private INodeInfoReader reader;
 
-		private WeakPtrSchemaConverter converter;
+		private WeakPtrNodeConverter converter;
 		private WeakPtrCodeGenerator generator;
 
 		public override Image Icon => Properties.Resources.logo_frostbite;
@@ -45,7 +45,7 @@ namespace FrostbitePlugin
 			host.RegisterNodeInfoReader(reader);
 
 			// Register the WeakPtr node
-			converter = new WeakPtrSchemaConverter();
+			converter = new WeakPtrNodeConverter();
 			generator = new WeakPtrCodeGenerator();
 			host.RegisterNodeType(typeof(WeakPtrNode), "Frostbite WeakPtr", Icon, converter, generator);
 

@@ -73,7 +73,7 @@
     </Compile>
     <Compile Include="WeakPtrCodeGenerator.cs" />
     <Compile Include="WeakPtrNode.cs" />
-    <Compile Include="WeakPtrSchemaConverter.cs" />
+    <Compile Include="WeakPtrNodeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReClass.NET\ReClass.NET.csproj">
