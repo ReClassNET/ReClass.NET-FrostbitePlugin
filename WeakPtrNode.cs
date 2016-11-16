@@ -17,9 +17,6 @@ namespace FrostbitePlugin
 		/// <summary>Disable the cycle check for pointer references.</summary>
 		public override bool PerformCycleCheck => false;
 
-		/// <summary>Creates a new instance of this class to clone it.</summary>
-		protected override BaseNode CreateCloneInstance() => new WeakPtrNode();
-
 		/// <summary>Called when the node was created. Creates a new class as inner node.</summary>
 		public override void Intialize()
 		{
