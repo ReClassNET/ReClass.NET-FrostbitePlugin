@@ -48,9 +48,9 @@ namespace FrostbitePlugin
 			var tx = x;
 			x = AddAddressOffset(view, x, y);
 
-			x = AddText(view, x, y, FrostbitePluginExt.Settings.TypeColor, HotSpot.NoneId, "WeakPtr") + view.Font.Width;
-			x = AddText(view, x, y, FrostbitePluginExt.Settings.NameColor, HotSpot.NameId, Name) + view.Font.Width;
-			x = AddText(view, x, y, FrostbitePluginExt.Settings.ValueColor, HotSpot.NoneId, $"<{InnerNode.Name}>");
+			x = AddText(view, x, y, view.Settings.TypeColor, HotSpot.NoneId, "WeakPtr") + view.Font.Width;
+			x = AddText(view, x, y, view.Settings.NameColor, HotSpot.NameId, Name) + view.Font.Width;
+			x = AddText(view, x, y, view.Settings.ValueColor, HotSpot.NoneId, $"<{InnerNode.Name}>");
 			x = AddIcon(view, x, y, Icons.Change, 4, HotSpotType.ChangeType);
 
 			x += view.Font.Width;
