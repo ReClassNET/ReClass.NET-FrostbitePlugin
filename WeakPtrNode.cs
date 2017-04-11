@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using ReClassNET;
 using ReClassNET.Memory;
 using ReClassNET.Nodes;
@@ -30,17 +31,20 @@ namespace FrostbitePlugin
 		/// <param name="view">The view information.</param>
 		/// <param name="x">The x coordinate.</param>
 		/// <param name="y">The y coordinate.</param>
-		/// <returns>The height the node occupies.</returns>
-		public override int Draw(ViewInfo view, int x, int y)
+		/// <returns>The pixel size the node occupies.</returns>
+		public override Size Draw(ViewInfo view, int x, int y)
 		{
 			if (IsHidden)
 			{
 				return DrawHidden(view, x, y);
 			}
 
+			var origX = x;
+			var origY = y;
+
 			AddSelection(view, x, y, view.Font.Height);
-			AddDelete(view, x, y);
-			AddTypeDrop(view, x, y);
+			AddDelete(view, y);
+			AddTypeDrop(view, y);
 
 			x = AddOpenClose(view, x, y);
 			x = AddIcon(view, x, y, Icons.Pointer, -1, HotSpotType.None);
@@ -57,6 +61,8 @@ namespace FrostbitePlugin
 			AddComment(view, x, y);
 
 			y += view.Font.Height;
+
+			var size = new Size(x - origX, y - origY);
 
 			if (levelsOpen[view.Level])
 			{
@@ -78,16 +84,19 @@ namespace FrostbitePlugin
 				v.Address = ptr;
 				v.Memory = memory;
 
-				y = InnerNode.Draw(v, tx, y);
+				var innerSize = InnerNode.Draw(v, tx, y);
+
+				size.Width = Math.Max(size.Width, innerSize.Width + tx - origX);
+				size.Height += innerSize.Height;
 			}
 
-			return y;
+			return size;
 		}
 
 		/// <summary>Calculates the height of the node.</summary>
 		/// <param name="view">The view information.</param>
 		/// <returns>The calculated height.</returns>
-		public override int CalculateHeight(ViewInfo view)
+		public override int CalculateDrawnHeight(ViewInfo view)
 		{
 			if (IsHidden)
 			{
@@ -97,7 +106,7 @@ namespace FrostbitePlugin
 			var h = view.Font.Height;
 			if (levelsOpen[view.Level])
 			{
-				h += InnerNode.CalculateHeight(view);
+				h += InnerNode.CalculateDrawnHeight(view);
 			}
 			return h;
 		}
