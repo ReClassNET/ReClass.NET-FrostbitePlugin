@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Text;
 using ReClassNET;
 using ReClassNET.Memory;
 using ReClassNET.Nodes;
@@ -31,12 +30,7 @@ namespace FrostbitePlugin
 				Terminate();
 			}
 
-			if (host == null)
-			{
-				throw new ArgumentNullException(nameof(host));
-			}
-
-			this.host = host;
+			this.host = host ?? throw new ArgumentNullException(nameof(host));
 
 			Settings = host.Settings;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml.Linq;
 using ReClassNET.DataExchange;
@@ -35,7 +34,7 @@ namespace FrostbitePlugin
 			node = null;
 
 			var reference = NodeUuid.FromBase64String(element.Attribute(ReClassNetFile.XmlReferenceAttribute)?.Value, false);
-			var innerClass = classes.Where(c => c.Uuid.Equals(reference)).FirstOrDefault();
+			var innerClass = classes.FirstOrDefault(c => c.Uuid.Equals(reference));
 			if (innerClass == null)
 			{
 				logger.Log(LogLevel.Warning, $"Skipping node with unknown reference: {reference}");

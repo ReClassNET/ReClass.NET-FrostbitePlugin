@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using ReClassNET;
 using ReClassNET.Memory;
 using ReClassNET.Nodes;
 using ReClassNET.UI;
