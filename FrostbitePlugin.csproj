@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WIN32</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;RECLASSNET32</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
@@ -28,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;WIN32;RELEASE</DefineConstants>
+    <DefineConstants>TRACE;RECLASSNET32;RELEASE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -38,7 +38,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\x64\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WIN64</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;RECLASSNET64</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
@@ -48,7 +48,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\x64\</OutputPath>
-    <DefineConstants>TRACE;WIN64;RELEASE</DefineConstants>
+    <DefineConstants>TRACE;RECLASSNET64;RELEASE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -76,12 +76,6 @@
     <Compile Include="WeakPtrNodeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReClass.NET\ReClass.NET.csproj">
-      <Project>{BFB8917D-E9B4-463F-A6E8-612C35728C78}</Project>
-      <Name>ReClass.NET</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -89,6 +83,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\logo_frostbite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReClass.NET\ReClass.NET\ReClass.NET.csproj">
+      <Project>{bfb8917d-e9b4-463f-a6e8-612c35728c78}</Project>
+      <Name>ReClass.NET</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

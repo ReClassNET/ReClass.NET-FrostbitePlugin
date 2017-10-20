@@ -7,7 +7,7 @@ using ReClassNET.Util;
 
 namespace FrostbitePlugin
 {
-	class WeakPtrNode : BaseReferenceNode
+	public class WeakPtrNode : BaseReferenceNode
 	{
 		private readonly MemoryBuffer memory = new MemoryBuffer();
 

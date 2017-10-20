@@ -7,7 +7,7 @@ using ReClassNET.Nodes;
 
 namespace FrostbitePlugin
 {
-	class WeakPtrNodeConverter : ICustomNodeConverter
+	public class WeakPtrNodeConverter : ICustomNodeConverter
 	{
 		/// <summary>Name of the type used in the XML data.</summary>
 		private const string XmlType = "FrostBite::WeakPtr";
@@ -55,7 +55,7 @@ namespace FrostbitePlugin
 			return true;
 		}
 
-		/// <summary>Creates a xml element from the node. This method gets only called if <see cref="CanHandleNode(BaseNode node)"/> returned true.</summary>
+		/// <summary>Creates a xml element from the node. This method gets only called if <see cref="CanHandleNode(BaseNode)"/> returned true.</summary>
 		/// <param name="node">The node to create the xml element from.</param>
 		/// <param name="logger">The logger used to output messages.</param>
 		/// <returns>The xml element for the node.</returns>

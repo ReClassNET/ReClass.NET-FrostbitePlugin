@@ -58,7 +58,7 @@ namespace FrostbitePlugin
 
 
 	/// <summary>A custom node info reader which outputs Frostbite type infos.</summary>
-	class FrostBiteNodeInfoReader : INodeInfoReader
+	public class FrostBiteNodeInfoReader : INodeInfoReader
 	{
 		public string ReadNodeInfo(BaseNode node, IntPtr value, MemoryBuffer memory)
 		{
@@ -103,7 +103,7 @@ namespace FrostbitePlugin
 			var getTypeFnPtr = memory.Process.ReadRemoteObject<IntPtr>(value);
 			if (getTypeFnPtr.MayBeValid())
 			{
-#if WIN64
+#if RECLASSNET64
 				var offset = memory.Process.ReadRemoteObject<int>(getTypeFnPtr + 3);
 				var typeInfoPtr = getTypeFnPtr + offset + 7;
 #else

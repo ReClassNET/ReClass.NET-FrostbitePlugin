@@ -4,7 +4,7 @@ using ReClassNET.Nodes;
 
 namespace FrostbitePlugin
 {
-	class WeakPtrCodeGenerator : ICustomCodeGenerator
+	public class WeakPtrCodeGenerator : ICustomCodeGenerator
 	{
 		/// <summary>Checks if the language is C++ and the node is a WeakPtrNode.</summary>
 		/// <param name="node">The node to check.</param>
