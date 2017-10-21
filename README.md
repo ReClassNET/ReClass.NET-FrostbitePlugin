@@ -10,3 +10,14 @@ INSTALLATION
 - Start ReClass.NET and check the plugins form.
 
 ![alt tag](https://abload.de/img/reclassnet_frostbite2zhuq0.jpg)
+
+Compiling
+-----
+If you want to compile the ReClass.NET Frostbite Plugin just fork the repository and create the following folder structure. If you don't use this structure you need to fix the project references.
+
+```
+..\ReClass.NET\
+..\ReClass.NET\ReClass.NET\ReClass.NET.csproj
+..\ReClass.NET-FrostbitePlugin
+..\ReClass.NET-FrostbitePlugin\ReClass.NET-FrostbitePlugin.csproj
+```

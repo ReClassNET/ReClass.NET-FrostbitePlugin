@@ -82,6 +82,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md" />
     <None Include="Resources\logo_frostbite.png" />
   </ItemGroup>
   <ItemGroup>
