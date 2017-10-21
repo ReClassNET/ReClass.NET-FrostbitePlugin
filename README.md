@@ -19,5 +19,5 @@ If you want to compile the ReClass.NET Frostbite Plugin just fork the repository
 ..\ReClass.NET\
 ..\ReClass.NET\ReClass.NET\ReClass.NET.csproj
 ..\ReClass.NET-FrostbitePlugin
-..\ReClass.NET-FrostbitePlugin\ReClass.NET-FrostbitePlugin.csproj
+..\ReClass.NET-FrostbitePlugin\FrostbitePlugin.csproj
 ```
