@@ -60,17 +60,17 @@ namespace FrostbitePlugin
 	/// <summary>A custom node info reader which outputs Frostbite type infos.</summary>
 	public class FrostBiteNodeInfoReader : INodeInfoReader
 	{
-		public string ReadNodeInfo(BaseNode node, IntPtr value, MemoryBuffer memory)
+		public string ReadNodeInfo(BaseNode node, IntPtr nodeAddress, IntPtr nodeValue, MemoryBuffer memory)
 		{
 			// 1. try the direct value
-			var info = ReadPtrInfo(value, memory);
+			var info = ReadPtrInfo(nodeValue, memory);
 			if (!string.IsNullOrEmpty(info))
 			{
 				return info;
 			}
 
 			// 2. try indirect pointer
-			var indirectPtr = memory.Process.ReadRemoteObject<IntPtr>(value);
+			var indirectPtr = memory.Process.ReadRemoteObject<IntPtr>(nodeValue);
 			if (indirectPtr.MayBeValid())
 			{
 				info = ReadPtrInfo(indirectPtr, memory);
@@ -98,7 +98,7 @@ namespace FrostbitePlugin
 			return null;
 		}
 
-		private string ReadPtrInfo(IntPtr value, MemoryBuffer memory)
+		private static string ReadPtrInfo(IntPtr value, MemoryBuffer memory)
 		{
 			var getTypeFnPtr = memory.Process.ReadRemoteObject<IntPtr>(value);
 			if (getTypeFnPtr.MayBeValid())
