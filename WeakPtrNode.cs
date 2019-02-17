@@ -1,29 +1,40 @@
 ﻿using System;
 using System.Drawing;
+using ReClassNET.Extensions;
 using ReClassNET.Memory;
 using ReClassNET.Nodes;
 using ReClassNET.UI;
-using ReClassNET.Util;
 
 namespace FrostbitePlugin
 {
-	public class WeakPtrNode : BaseReferenceNode
+	public class WeakPtrNode : BaseWrapperNode
 	{
 		private readonly MemoryBuffer memory = new MemoryBuffer();
 
 		/// <summary>Size of the node in bytes.</summary>
 		public override int MemorySize => IntPtr.Size;
 
-		/// <summary>Disable the cycle check for pointer references.</summary>
-		public override bool PerformCycleCheck => false;
+		/// <summary>Disable the cycle check for pointers.</summary>
+		protected override bool PerformCycleCheck => false;
+
+		public override void GetUserInterfaceInfo(out string name, out Image icon)
+		{
+			name = "Weak Pointer";
+			icon = Properties.Resources.logo_frostbite;
+		}
 
 		/// <summary>Called when the node was created. Creates a new class as inner node.</summary>
-		public override void Intialize()
+		public override void Initialize()
 		{
 			var node = ClassNode.Create();
-			node.Intialize();
+			node.Initialize();
 			node.AddBytes(64);
 			InnerNode = node;
+		}
+
+		public override bool CanChangeInnerNodeTo(BaseNode node)
+		{
+			return node is ClassNode;
 		}
 
 		/// <summary>Draws this node.</summary>
@@ -33,7 +44,7 @@ namespace FrostbitePlugin
 		/// <returns>The pixel size the node occupies.</returns>
 		public override Size Draw(ViewInfo view, int x, int y)
 		{
-			if (IsHidden)
+			if (IsHidden && !IsWrapped)
 			{
 				return DrawHidden(view, x, y);
 			}
@@ -54,7 +65,7 @@ namespace FrostbitePlugin
 			x = AddText(view, x, y, view.Settings.TypeColor, HotSpot.NoneId, "WeakPtr") + view.Font.Width;
 			x = AddText(view, x, y, view.Settings.NameColor, HotSpot.NameId, Name) + view.Font.Width;
 			x = AddText(view, x, y, view.Settings.ValueColor, HotSpot.NoneId, $"<{InnerNode.Name}>");
-			x = AddIcon(view, x, y, Icons.Change, 4, HotSpotType.ChangeType);
+			x = AddIcon(view, x, y, Icons.Change, 4, HotSpotType.ChangeClassType);
 
 			x += view.Font.Width;
 			AddComment(view, x, y);
@@ -63,7 +74,7 @@ namespace FrostbitePlugin
 
 			var size = new Size(x - origX, y - origY);
 
-			if (levelsOpen[view.Level])
+			if (LevelsOpen[view.Level])
 			{
 				var ptr = view.Memory.ReadObject<IntPtr>(Offset);
 				if (!ptr.IsNull())
@@ -97,13 +108,13 @@ namespace FrostbitePlugin
 		/// <returns>The calculated height.</returns>
 		public override int CalculateDrawnHeight(ViewInfo view)
 		{
-			if (IsHidden)
+			if (IsHidden && !IsWrapped)
 			{
 				return HiddenHeight;
 			}
 
 			var h = view.Font.Height;
-			if (levelsOpen[view.Level])
+			if (LevelsOpen[view.Level])
 			{
 				h += InnerNode.CalculateDrawnHeight(view);
 			}

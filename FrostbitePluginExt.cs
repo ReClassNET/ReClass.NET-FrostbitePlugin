@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 using ReClassNET;
+using ReClassNET.Extensions;
 using ReClassNET.Memory;
 using ReClassNET.Nodes;
 using ReClassNET.Plugins;
-using ReClassNET.Util;
 
 namespace FrostbitePlugin
 {
@@ -13,11 +15,6 @@ namespace FrostbitePlugin
 		private IPluginHost host;
 
 		internal static Settings Settings;
-
-		private INodeInfoReader reader;
-
-		private WeakPtrNodeConverter converter;
-		private WeakPtrCodeGenerator generator;
 
 		public override Image Icon => Properties.Resources.logo_frostbite;
 
@@ -34,33 +31,38 @@ namespace FrostbitePlugin
 
 			Settings = host.Settings;
 
-			// Register the InfoReader
-			reader = new FrostBiteNodeInfoReader();
-			host.RegisterNodeInfoReader(reader);
-
-			// Register the WeakPtr node
-			converter = new WeakPtrNodeConverter();
-			generator = new WeakPtrCodeGenerator();
-			host.RegisterNodeType(typeof(WeakPtrNode), "Frostbite WeakPtr", Icon, converter, generator);
-
 			return true;
 		}
 
 		public override void Terminate()
 		{
-			host.DeregisterNodeType(typeof(WeakPtrNode), converter, generator);
-
-			host.DeregisterNodeInfoReader(reader);
-
 			host = null;
 		}
-	}
 
+		public override IReadOnlyList<INodeInfoReader> GetNodeInfoReaders()
+		{
+			// Register the InfoReader
+
+			return new[] { new FrostBiteNodeInfoReader() };
+		}
+
+		public override CustomNodeTypes GetCustomNodeTypes()
+		{
+			// Register the WeakPtr node
+
+			return new CustomNodeTypes
+			{
+				CodeGenerator = new WeakPtrCodeGenerator(),
+				Serializer = new WeakPtrNodeConverter(),
+				NodeTypes = new[] { typeof(WeakPtrNode) }
+			};
+		}
+	}
 
 	/// <summary>A custom node info reader which outputs Frostbite type infos.</summary>
 	public class FrostBiteNodeInfoReader : INodeInfoReader
 	{
-		public string ReadNodeInfo(BaseNode node, IntPtr nodeAddress, IntPtr nodeValue, MemoryBuffer memory)
+		public string ReadNodeInfo(BaseHexCommentNode node, IntPtr nodeAddress, IntPtr nodeValue, MemoryBuffer memory)
 		{
 			// 1. try the direct value
 			var info = ReadPtrInfo(nodeValue, memory);
@@ -70,7 +72,7 @@ namespace FrostbitePlugin
 			}
 
 			// 2. try indirect pointer
-			var indirectPtr = memory.Process.ReadRemoteObject<IntPtr>(nodeValue);
+			var indirectPtr = memory.Process.ReadRemoteIntPtr(nodeValue);
 			if (indirectPtr.MayBeValid())
 			{
 				info = ReadPtrInfo(indirectPtr, memory);
@@ -83,7 +85,7 @@ namespace FrostbitePlugin
 				var weakTempPtr = indirectPtr - IntPtr.Size;
 				if (weakTempPtr.MayBeValid())
 				{
-					var weakPtr = memory.Process.ReadRemoteObject<IntPtr>(weakTempPtr);
+					var weakPtr = memory.Process.ReadRemoteIntPtr(weakTempPtr);
 					if (weakPtr.MayBeValid())
 					{
 						info = ReadPtrInfo(weakPtr, memory);
@@ -100,24 +102,24 @@ namespace FrostbitePlugin
 
 		private static string ReadPtrInfo(IntPtr value, MemoryBuffer memory)
 		{
-			var getTypeFnPtr = memory.Process.ReadRemoteObject<IntPtr>(value);
+			var getTypeFnPtr = memory.Process.ReadRemoteIntPtr(value);
 			if (getTypeFnPtr.MayBeValid())
 			{
 #if RECLASSNET64
-				var offset = memory.Process.ReadRemoteObject<int>(getTypeFnPtr + 3);
+				var offset = memory.Process.ReadRemoteInt32(getTypeFnPtr + 3);
 				var typeInfoPtr = getTypeFnPtr + offset + 7;
 #else
-				var typeInfoPtr = memory.Process.ReadRemoteObject<IntPtr>(getTypeFnPtr + 1);
+				var typeInfoPtr = memory.Process.ReadRemoteIntPtr(getTypeFnPtr + 1);
 #endif
 				if (typeInfoPtr.MayBeValid())
 				{
-					var typeInfoDataPtr = memory.Process.ReadRemoteObject<IntPtr>(typeInfoPtr);
+					var typeInfoDataPtr = memory.Process.ReadRemoteIntPtr(typeInfoPtr);
 					if (typeInfoDataPtr.MayBeValid())
 					{
-						var namePtr = memory.Process.ReadRemoteObject<IntPtr>(typeInfoDataPtr);
+						var namePtr = memory.Process.ReadRemoteIntPtr(typeInfoDataPtr);
 						if (namePtr.MayBeValid())
 						{
-							var info = memory.Process.ReadRemoteUTF8StringUntilFirstNullCharacter(namePtr, 64);
+							var info = memory.Process.ReadRemoteStringUntilFirstNullCharacter(Encoding.UTF8, namePtr, 64);
 							if (info.Length > 0 && info[0].IsPrintable())
 							{
 								return info;

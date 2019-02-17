@@ -4,21 +4,21 @@ using ReClassNET.Nodes;
 
 namespace FrostbitePlugin
 {
-	public class WeakPtrCodeGenerator : ICustomCodeGenerator
+	public class WeakPtrCodeGenerator : ICustomCppCodeGenerator
 	{
-		/// <summary>Checks if the language is C++ and the node is a WeakPtrNode.</summary>
-		/// <param name="node">The node to check.</param>
-		/// <param name="language">The language to check.</param>
-		/// <returns>True if we can generate code, false if not.</returns>
-		public bool CanGenerateCode(BaseNode node, Language language) => language == Language.Cpp && node is WeakPtrNode;
-
-		/// <summary>Gets the member definition of the node.</summary>
-		/// <param name="node">The member node.</param>
-		/// <param name="language">The language to generate.</param>
-		/// <returns>The member definition of the node.</returns>
-		public MemberDefinition GetMemberDefinition(BaseNode node, Language language, ILogger logger)
+		public bool CanHandle(BaseNode node)
 		{
-			return new MemberDefinition(node, $"fb::WeakPtr<{((BaseReferenceNode)node).InnerNode.Name}>");
+			return node is WeakPtrNode;
+		}
+
+		public BaseNode TransformNode(BaseNode node)
+		{
+			return node;
+		}
+
+		public string GetTypeDefinition(BaseNode node, GetTypeDefinitionFunc defaultGetTypeDefinitionFunc, ResolveWrappedTypeFunc defaultResolveWrappedTypeFunc, ILogger logger)
+		{
+			return $"fb::WeakPtr<class {((ClassNode)((WeakPtrNode)node).InnerNode).Name}>";
 		}
 	}
 }

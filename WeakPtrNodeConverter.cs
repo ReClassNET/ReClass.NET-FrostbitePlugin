@@ -7,7 +7,7 @@ using ReClassNET.Nodes;
 
 namespace FrostbitePlugin
 {
-	public class WeakPtrNodeConverter : ICustomNodeConverter
+	public class WeakPtrNodeConverter : ICustomNodeSerializer
 	{
 		/// <summary>Name of the type used in the XML data.</summary>
 		private const string XmlType = "FrostBite::WeakPtr";
@@ -29,7 +29,7 @@ namespace FrostbitePlugin
 		/// <param name="logger">The logger used to output messages.</param>
 		/// <param name="node">[out] The node for the xml element.</param>
 		/// <returns>True if a node was created, otherwise false.</returns>
-		public bool TryCreateNodeFromElement(XElement element, ClassNode parent, IEnumerable<ClassNode> classes, ILogger logger, out BaseNode node)
+		public bool TryCreateNodeFromElement(XElement element, BaseNode parent, IEnumerable<ClassNode> classes, ILogger logger, CreateNodeFromElementHandler defaultHandler, out BaseNode node)
 		{
 			node = null;
 
@@ -59,14 +59,14 @@ namespace FrostbitePlugin
 		/// <param name="node">The node to create the xml element from.</param>
 		/// <param name="logger">The logger used to output messages.</param>
 		/// <returns>The xml element for the node.</returns>
-		public XElement CreateElementFromNode(BaseNode node, ILogger logger)
+		public XElement CreateElementFromNode(BaseNode node, ILogger logger, CreateElementFromNodeHandler defaultHandler)
 		{
 			return new XElement(
 				ReClassNetFile.XmlNodeElement,
 				new XAttribute(ReClassNetFile.XmlNameAttribute, node.Name ?? string.Empty),
 				new XAttribute(ReClassNetFile.XmlCommentAttribute, node.Comment ?? string.Empty),
 				new XAttribute(ReClassNetFile.XmlTypeAttribute, XmlType),
-				new XAttribute(ReClassNetFile.XmlReferenceAttribute, (node as WeakPtrNode).InnerNode.Uuid.ToBase64String())
+				new XAttribute(ReClassNetFile.XmlReferenceAttribute, ((ClassNode)((WeakPtrNode)node).InnerNode).Uuid.ToBase64String())
 			);
 		}
 	}
