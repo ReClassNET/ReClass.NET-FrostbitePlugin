@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 using ReClassNET.DataExchange.ReClass;
 using ReClassNET.Logger;
@@ -27,32 +26,10 @@ namespace FrostbitePlugin
 		/// <param name="parent">The parent of the node.</param>
 		/// <param name="classes">The list of classes which correspond to the node.</param>
 		/// <param name="logger">The logger used to output messages.</param>
-		/// <param name="node">[out] The node for the xml element.</param>
 		/// <returns>True if a node was created, otherwise false.</returns>
-		public bool TryCreateNodeFromElement(XElement element, BaseNode parent, IEnumerable<ClassNode> classes, ILogger logger, CreateNodeFromElementHandler defaultHandler, out BaseNode node)
+		public BaseNode CreateNodeFromElement(XElement element, BaseNode parent, IEnumerable<ClassNode> classes, ILogger logger, CreateNodeFromElementHandler defaultHandler)
 		{
-			node = null;
-
-			var reference = NodeUuid.FromBase64String(element.Attribute(ReClassNetFile.XmlReferenceAttribute)?.Value, false);
-			var innerClass = classes.FirstOrDefault(c => c.Uuid.Equals(reference));
-			if (innerClass == null)
-			{
-				logger.Log(LogLevel.Warning, $"Skipping node with unknown reference: {reference}");
-				logger.Log(LogLevel.Warning, element.ToString());
-
-				return false;
-			}
-
-			var weakPtrNode = new WeakPtrNode
-			{
-				Name = element.Attribute(ReClassNetFile.XmlNameAttribute)?.Value ?? string.Empty,
-				Comment = element.Attribute(ReClassNetFile.XmlCommentAttribute)?.Value ?? string.Empty
-			};
-			weakPtrNode.ChangeInnerNode(innerClass);
-
-			node = weakPtrNode;
-
-			return true;
+			return new WeakPtrNode();
 		}
 
 		/// <summary>Creates a xml element from the node. This method gets only called if <see cref="CanHandleNode(BaseNode)"/> returned true.</summary>
@@ -63,10 +40,7 @@ namespace FrostbitePlugin
 		{
 			return new XElement(
 				ReClassNetFile.XmlNodeElement,
-				new XAttribute(ReClassNetFile.XmlNameAttribute, node.Name ?? string.Empty),
-				new XAttribute(ReClassNetFile.XmlCommentAttribute, node.Comment ?? string.Empty),
-				new XAttribute(ReClassNetFile.XmlTypeAttribute, XmlType),
-				new XAttribute(ReClassNetFile.XmlReferenceAttribute, ((ClassNode)((WeakPtrNode)node).InnerNode).Uuid.ToBase64String())
+				new XAttribute(ReClassNetFile.XmlTypeAttribute, XmlType)
 			);
 		}
 	}

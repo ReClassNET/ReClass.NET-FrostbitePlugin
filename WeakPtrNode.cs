@@ -7,7 +7,7 @@ using ReClassNET.UI;
 
 namespace FrostbitePlugin
 {
-	public class WeakPtrNode : BaseWrapperNode
+	public class WeakPtrNode : BaseClassWrapperNode
 	{
 		private readonly MemoryBuffer memory = new MemoryBuffer();
 
@@ -30,11 +30,6 @@ namespace FrostbitePlugin
 			node.Initialize();
 			node.AddBytes(64);
 			InnerNode = node;
-		}
-
-		public override bool CanChangeInnerNodeTo(BaseNode node)
-		{
-			return node is ClassNode;
 		}
 
 		/// <summary>Draws this node.</summary>
