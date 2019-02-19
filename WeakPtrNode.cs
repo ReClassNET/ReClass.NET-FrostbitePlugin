@@ -48,8 +48,6 @@ namespace FrostbitePlugin
 			var origY = y;
 
 			AddSelection(view, x, y, view.Font.Height);
-			AddDelete(view, y);
-			AddTypeDrop(view, y);
 
 			x = AddOpenClose(view, x, y);
 			x = AddIcon(view, x, y, Icons.Pointer, -1, HotSpotType.None);
@@ -63,7 +61,12 @@ namespace FrostbitePlugin
 			x = AddIcon(view, x, y, Icons.Change, 4, HotSpotType.ChangeClassType);
 
 			x += view.Font.Width;
+
 			AddComment(view, x, y);
+
+			DrawInvalidMemoryIndicator(view, y);
+			AddTypeDrop(view, y);
+			AddDelete(view, y);
 
 			y += view.Font.Height;
 
