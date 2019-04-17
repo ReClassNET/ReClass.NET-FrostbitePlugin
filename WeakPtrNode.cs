@@ -11,10 +11,8 @@ namespace FrostbitePlugin
 	{
 		private readonly MemoryBuffer memory = new MemoryBuffer();
 
-		/// <summary>Size of the node in bytes.</summary>
 		public override int MemorySize => IntPtr.Size;
 
-		/// <summary>Disable the cycle check for pointers.</summary>
 		protected override bool PerformCycleCheck => false;
 
 		public override void GetUserInterfaceInfo(out string name, out Image icon)
@@ -23,7 +21,6 @@ namespace FrostbitePlugin
 			icon = Properties.Resources.logo_frostbite;
 		}
 
-		/// <summary>Called when the node was created. Creates a new class as inner node.</summary>
 		public override void Initialize()
 		{
 			var node = ClassNode.Create();
@@ -32,11 +29,6 @@ namespace FrostbitePlugin
 			InnerNode = node;
 		}
 
-		/// <summary>Draws this node.</summary>
-		/// <param name="view">The view information.</param>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		/// <returns>The pixel size the node occupies.</returns>
 		public override Size Draw(ViewInfo view, int x, int y)
 		{
 			if (IsHidden && !IsWrapped)
@@ -49,7 +41,7 @@ namespace FrostbitePlugin
 
 			AddSelection(view, x, y, view.Font.Height);
 
-			x = AddOpenClose(view, x, y);
+			x = AddOpenCloseIcon(view, x, y);
 			x = AddIcon(view, x, y, Icons.Pointer, -1, HotSpotType.None);
 
 			var tx = x;
@@ -64,9 +56,9 @@ namespace FrostbitePlugin
 
 			AddComment(view, x, y);
 
-			DrawInvalidMemoryIndicator(view, y);
-			AddTypeDrop(view, y);
-			AddDelete(view, y);
+			DrawInvalidMemoryIndicatorIcon(view, y);
+			AddContextDropDownIcon(view, y);
+			AddDeleteIcon(view, y);
 
 			y += view.Font.Height;
 
@@ -80,7 +72,7 @@ namespace FrostbitePlugin
 					ptr = view.Memory.Process.ReadRemoteObject<IntPtr>(ptr);
 					if (!ptr.IsNull())
 					{
-						ptr = ptr - IntPtr.Size;
+						ptr -= IntPtr.Size;
 					}
 				}
 
@@ -101,9 +93,6 @@ namespace FrostbitePlugin
 			return size;
 		}
 
-		/// <summary>Calculates the height of the node.</summary>
-		/// <param name="view">The view information.</param>
-		/// <returns>The calculated height.</returns>
 		public override int CalculateDrawnHeight(ViewInfo view)
 		{
 			if (IsHidden && !IsWrapped)
