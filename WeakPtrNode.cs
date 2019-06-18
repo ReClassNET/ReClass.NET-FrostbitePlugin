@@ -26,7 +26,7 @@ namespace FrostbitePlugin
 			var node = ClassNode.Create();
 			node.Initialize();
 			node.AddBytes(64);
-			InnerNode = node;
+			ChangeInnerNode(node);
 		}
 
 		public override Size Draw(ViewInfo view, int x, int y)
@@ -69,7 +69,7 @@ namespace FrostbitePlugin
 				var ptr = view.Memory.ReadObject<IntPtr>(Offset);
 				if (!ptr.IsNull())
 				{
-					ptr = view.Memory.Process.ReadRemoteObject<IntPtr>(ptr);
+					ptr = view.Process.ReadRemoteObject<IntPtr>(ptr);
 					if (!ptr.IsNull())
 					{
 						ptr -= IntPtr.Size;
@@ -77,8 +77,7 @@ namespace FrostbitePlugin
 				}
 
 				memory.Size = InnerNode.MemorySize;
-				memory.Process = view.Memory.Process;
-				memory.Update(ptr);
+				memory.UpdateFrom(view.Process, ptr);
 
 				var v = view.Clone();
 				v.Address = ptr;
