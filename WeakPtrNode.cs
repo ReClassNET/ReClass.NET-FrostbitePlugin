@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using ReClassNET.Controls;
 using ReClassNET.Extensions;
 using ReClassNET.Memory;
 using ReClassNET.Nodes;
@@ -29,47 +30,47 @@ namespace FrostbitePlugin
 			ChangeInnerNode(node);
 		}
 
-		public override Size Draw(ViewInfo view, int x, int y)
+		public override Size Draw(DrawContext context, int x, int y)
 		{
 			if (IsHidden && !IsWrapped)
 			{
-				return DrawHidden(view, x, y);
+				return DrawHidden(context, x, y);
 			}
 
 			var origX = x;
 			var origY = y;
 
-			AddSelection(view, x, y, view.Font.Height);
+			AddSelection(context, x, y, context.Font.Height);
 
-			x = AddOpenCloseIcon(view, x, y);
-			x = AddIcon(view, x, y, Icons.Pointer, -1, HotSpotType.None);
+			x = AddOpenCloseIcon(context, x, y);
+			x = AddIcon(context, x, y, context.IconProvider.Pointer, -1, HotSpotType.None);
 
 			var tx = x;
-			x = AddAddressOffset(view, x, y);
+			x = AddAddressOffset(context, x, y);
 
-			x = AddText(view, x, y, view.Settings.TypeColor, HotSpot.NoneId, "WeakPtr") + view.Font.Width;
-			x = AddText(view, x, y, view.Settings.NameColor, HotSpot.NameId, Name) + view.Font.Width;
-			x = AddText(view, x, y, view.Settings.ValueColor, HotSpot.NoneId, $"<{InnerNode.Name}>");
-			x = AddIcon(view, x, y, Icons.Change, 4, HotSpotType.ChangeClassType);
+			x = AddText(context, x, y, context.Settings.TypeColor, HotSpot.NoneId, "WeakPtr") + context.Font.Width;
+			x = AddText(context, x, y, context.Settings.NameColor, HotSpot.NameId, Name) + context.Font.Width;
+			x = AddText(context, x, y, context.Settings.ValueColor, HotSpot.NoneId, $"<{InnerNode.Name}>");
+			x = AddIcon(context, x, y, context.IconProvider.Change, 4, HotSpotType.ChangeClassType);
 
-			x += view.Font.Width;
+			x += context.Font.Width;
 
-			AddComment(view, x, y);
+			AddComment(context, x, y);
 
-			DrawInvalidMemoryIndicatorIcon(view, y);
-			AddContextDropDownIcon(view, y);
-			AddDeleteIcon(view, y);
+			DrawInvalidMemoryIndicatorIcon(context, y);
+			AddContextDropDownIcon(context, y);
+			AddDeleteIcon(context, y);
 
-			y += view.Font.Height;
+			y += context.Font.Height;
 
 			var size = new Size(x - origX, y - origY);
 
-			if (LevelsOpen[view.Level])
+			if (LevelsOpen[context.Level])
 			{
-				var ptr = view.Memory.ReadObject<IntPtr>(Offset);
+				var ptr = context.Memory.ReadObject<IntPtr>(Offset);
 				if (!ptr.IsNull())
 				{
-					ptr = view.Process.ReadRemoteObject<IntPtr>(ptr);
+					ptr = context.Process.ReadRemoteObject<IntPtr>(ptr);
 					if (!ptr.IsNull())
 					{
 						ptr -= IntPtr.Size;
@@ -77,9 +78,9 @@ namespace FrostbitePlugin
 				}
 
 				memory.Size = InnerNode.MemorySize;
-				memory.UpdateFrom(view.Process, ptr);
+				memory.UpdateFrom(context.Process, ptr);
 
-				var v = view.Clone();
+				var v = context.Clone();
 				v.Address = ptr;
 				v.Memory = memory;
 
@@ -92,17 +93,17 @@ namespace FrostbitePlugin
 			return size;
 		}
 
-		public override int CalculateDrawnHeight(ViewInfo view)
+		public override int CalculateDrawnHeight(DrawContext context)
 		{
 			if (IsHidden && !IsWrapped)
 			{
 				return HiddenHeight;
 			}
 
-			var h = view.Font.Height;
-			if (LevelsOpen[view.Level])
+			var h = context.Font.Height;
+			if (LevelsOpen[context.Level])
 			{
-				h += InnerNode.CalculateDrawnHeight(view);
+				h += InnerNode.CalculateDrawnHeight(context);
 			}
 			return h;
 		}
