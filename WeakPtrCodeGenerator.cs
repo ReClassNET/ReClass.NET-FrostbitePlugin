@@ -18,7 +18,7 @@ namespace FrostbitePlugin
 
 		public override string GetTypeDefinition(BaseNode node, GetTypeDefinitionFunc defaultGetTypeDefinitionFunc, ResolveWrappedTypeFunc defaultResolveWrappedTypeFunc, ILogger logger)
 		{
-			return $"fb::WeakPtr<class {((ClassNode)((WeakPtrNode)node).InnerNode).Name}>";
+			return $"fb::WeakPtr<class {((WeakPtrNode)node).InnerNode.Name}>";
 		}
 	}
 }
