@@ -66,7 +66,7 @@ namespace FrostbitePlugin
 						var namePtr = process.ReadRemoteIntPtr(typeInfoDataPtr);
 						if (namePtr.MayBeValid())
 						{
-							var info = process.ReadRemoteStringUntilFirstNullCharacter(Encoding.UTF8, namePtr, 64);
+							var info = process.ReadRemoteStringUntilFirstNullCharacter(namePtr, Encoding.UTF8, 64);
 							if (info.Length > 0 && info[0].IsPrintable())
 							{
 								return info;

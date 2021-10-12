@@ -67,10 +67,10 @@ namespace FrostbitePlugin
 
 			if (LevelsOpen[context.Level])
 			{
-				var ptr = context.Memory.ReadObject<IntPtr>(Offset);
+				var ptr = context.Memory.ReadIntPtr(Offset);
 				if (!ptr.IsNull())
 				{
-					ptr = context.Process.ReadRemoteObject<IntPtr>(ptr);
+					ptr = context.Process.ReadRemoteIntPtr(ptr);
 					if (!ptr.IsNull())
 					{
 						ptr -= IntPtr.Size;
